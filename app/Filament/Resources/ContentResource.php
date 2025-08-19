@@ -14,6 +14,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Michaeld555\FilamentCroppie\Components\Croppie;
+
 
 class ContentResource extends Resource
 {
@@ -21,6 +23,7 @@ class ContentResource extends Resource
     public static bool $shouldRegisterNavigation = true;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     public static function getNavigationLabel(): string
     {
         return __('محتوا'); // 👈 translation key
@@ -30,21 +33,29 @@ class ContentResource extends Resource
     {
         return $form
             ->schema([
+                Croppie::make('image')
+                    ->label('تصویر اصلی')
+                    ->viewportType('square')
+//                    ->viewportHeight(250)
+//                    ->viewportWidth(500)
+                    ->enableZoom(true)
+                    ->directory('img/contents')
+                    ->imageFormat('png'),
                 Forms\Components\TextInput::make('title')
                     ->label('عنوان')
                     ->required()
+                    ->columnSpanFull()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('title_en')
-                    ->label('عنوان انگلیسی')
-                    ->required()
-                    ->maxLength(255),
+//                Forms\Components\TextInput::make('title_en')
+//                    ->label('عنوان انگلیسی')
+//                    ->required()
+//                    ->maxLength(255),
                 Forms\Components\Select::make('category_id')
                     ->label('دسته بندی')
                     ->relationship('category', 'title')
                     ->required()
-                    ->options(fn (callable $get) =>
-                    \App\Models\Category::query()
-                        ->when( 1, function ($query) {
+                    ->options(fn(callable $get) => \App\Models\Category::query()
+                        ->when(1, function ($query) {
                             // Filter categories as needed when conditions are met
                             $query->where('type', 'contents')->where('active', 1);
                         })
@@ -53,12 +64,11 @@ class ContentResource extends Resource
                     ->reactive(), // important so options update when 'type' or 'active' changes
 
                 Forms\Components\Select::make('active')
-
                     ->label('دیده شود')
                     ->options([
                         '1' => 'بله',
                         '0' => 'خیر',
-                        ]),
+                    ]),
 
                 RichEditor::make('text')
                     ->label('متن')
@@ -86,22 +96,35 @@ class ContentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->sortable()
+                    ->label('عنوان')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('category.title')
-            ->label('category'),
+                    ->label('دسته بندی'),
 
-                Tables\Columns\TextColumn::make('active'),
+
+                Tables\Columns\TextColumn::make('active')
+                    ->label('دیده شود'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->formatStateUsing(fn ($state) => explode(' ',(new DateController)->toPersian($state))[0]),
+                    ->label('تاریخ ایجاد')
+                    ->formatStateUsing(fn($state) => explode(' ', (new DateController)->toPersian($state))[0]),
 
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('category_id')
+                    ->label('دسته بندی')
+                    ->options(
+                        fn () => \App\Models\Category::query()
+                            ->where('type', 'contents')
+                            ->where('active', 1)
+                            ->pluck('title', 'id')
+                    ),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
