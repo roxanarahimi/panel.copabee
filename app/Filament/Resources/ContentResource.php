@@ -9,13 +9,17 @@ use App\Models\Content;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\ImageFile;
 use Michaeld555\FilamentCroppie\Components\Croppie;
+use Illuminate\Database\Eloquent\Model;
 
 
 class ContentResource extends Resource
@@ -37,13 +41,16 @@ class ContentResource extends Resource
                 Croppie::make('image')
                     ->label('تصویر اصلی')
                     ->viewportType('rectangle')
+                    ->name('content.png')
+
                     ->viewportHeight(250)
                     ->viewportWidth(500)
                     ->enableZoom(true)
                     ->disk('public') // or your disk
                     ->directory('img/contents')
                     ->imageFormat('png')
-                    ->imageName('content'),
+                   ,
+//                ImageFile::image(Storage::get('image')),
                 Forms\Components\TextInput::make('title')
                     ->label('عنوان')
                     ->required()
@@ -97,10 +104,16 @@ class ContentResource extends Resource
     {
         return $table
             ->columns([
+//                Tables\Columns\ImageColumn::make('image')->circular(),
+                Tables\Columns\ImageColumn::make('image')
+                    ->getStateUsing(function ($record): string {
+                        return $record->image;
+                    }),
                 Tables\Columns\TextColumn::make('title')
                     ->label('عنوان')
                     ->searchable()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('category.title')
                     ->label('دسته بندی'),
 
