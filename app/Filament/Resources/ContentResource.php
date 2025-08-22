@@ -42,8 +42,8 @@ class ContentResource extends Resource
                     ->enableZoom(true)
                     ->disk('public') // or your disk
                     ->directory('img/contents')
-                    ->imageName('content-'.Str::random(8) . '.png')
-                    ->imageFormat('png'),
+                    ->imageFormat('png')
+                    ->imageName(fn () => 'content-'.Str::random(8) . '.png'),
                 Forms\Components\TextInput::make('title')
                     ->label('عنوان')
                     ->required()
