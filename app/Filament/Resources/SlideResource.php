@@ -60,7 +60,16 @@ class SlideResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\ImageColumn::make('image')
+                    ->getStateUsing(function ($record): string {
+                        return $record->image;
+                    }),
+                Tables\Columns\IconColumn::make('active')
+                    ->label('نمایش')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check')->trueColor('success')
+                    ->falseIcon('heroicon-o-x-mark')->falseColor('danger')
+                ,
             ])
             ->filters([
                 //
