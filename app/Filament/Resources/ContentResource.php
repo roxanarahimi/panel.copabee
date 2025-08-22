@@ -47,7 +47,7 @@ class ContentResource extends Resource
                     ->viewportWidth(500)
                     ->enableZoom(true)
                     ->disk('public') // or your disk
-                    ->directory('/img/contents')
+                    ->directory('img/contents')
                     ->imageFormat('png')
                    ,
 //                ImageFile::image(Storage::get('image')),
@@ -104,11 +104,11 @@ class ContentResource extends Resource
     {
         return $table
             ->columns([
-//                Tables\Columns\ImageColumn::make('image'),
+//                Tables\Columns\ImageColumn::make('image')->circular(),
                 Tables\Columns\ImageColumn::make('image')
                     ->getStateUsing(function ($record): string {
                         return $record->image;
-                    })->circular(),
+                    }),
                 Tables\Columns\TextColumn::make('title')
                     ->label('عنوان')
                     ->searchable()
