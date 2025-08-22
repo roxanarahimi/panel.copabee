@@ -42,9 +42,7 @@ class ContentResource extends Resource
                     ->enableZoom(true)
                     ->disk('public') // or your disk
                     ->directory('img/contents')
-                    ->getUploadedFileNameForStorageUsing(function ($file): string {
-                        return 'content-' . Str::random(8) . '.png';
-                    })
+                    ->imageName('content-'.Str::random(8) . '.png')
                     ->imageFormat('png'),
                 Forms\Components\TextInput::make('title')
                     ->label('عنوان')
