@@ -42,7 +42,7 @@ class ContentResource extends Resource
                     ->label('تصویر اصلی')
                     ->viewportType('rectangle')
                     ->name('content.png')
-
+                    ->required()
                     ->viewportHeight(250)
                     ->viewportWidth(500)
                     ->enableZoom(true)
