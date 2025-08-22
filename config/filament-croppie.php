@@ -13,7 +13,7 @@ return [
         'boundary-width' => '600',
         'viewport-height' => '200',
         'viewport-width' => '200',
-        'enable-resize' => false,
+        'enable-resize' => true,
         'enable-zoom' => true,
         'show-zoomer' => true,
         'viewport-type' => 'circle',

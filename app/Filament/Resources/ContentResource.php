@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 use Michaeld555\FilamentCroppie\Components\Croppie;
 
 
@@ -35,11 +36,15 @@ class ContentResource extends Resource
             ->schema([
                 Croppie::make('image')
                     ->label('تصویر اصلی')
-                    ->viewportType('square')
-//                    ->viewportHeight(250)
-//                    ->viewportWidth(500)
+                    ->viewportType('rectangle')
+                    ->viewportHeight(250)
+                    ->viewportWidth(500)
                     ->enableZoom(true)
+                    ->disk('public') // or your disk
                     ->directory('img/contents')
+                    ->getUploadedFileNameForStorageUsing(function ($file): string {
+                        return 'content-' . Str::random(8) . '.png';
+                    })
                     ->imageFormat('png'),
                 Forms\Components\TextInput::make('title')
                     ->label('عنوان')
@@ -69,7 +74,6 @@ class ContentResource extends Resource
                         '1' => 'بله',
                         '0' => 'خیر',
                     ]),
-
                 RichEditor::make('text')
                     ->label('متن')
                     ->required()
