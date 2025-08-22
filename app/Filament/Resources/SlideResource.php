@@ -60,12 +60,13 @@ class SlideResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image')
+                Tables\Columns\ImageColumn::make('image')->width('40%')->height('auto')
                     ->getStateUsing(function ($record): string {
                         return $record->image;
                     }),
                 Tables\Columns\IconColumn::make('active')
                     ->label('نمایش')
+                    ->width('20%')
                     ->boolean()
                     ->trueIcon('heroicon-o-check')->trueColor('success')
                     ->falseIcon('heroicon-o-x-mark')->falseColor('danger')
@@ -76,6 +77,8 @@ class SlideResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
