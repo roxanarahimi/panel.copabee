@@ -47,7 +47,7 @@ class ContentResource extends Resource
                     ->viewportWidth(500)
                     ->enableZoom(true)
                     ->disk('public') // or your disk
-                    ->directory('img/contents')
+                    ->directory('/img/contents')
                     ->imageFormat('png')
                    ,
 //                ImageFile::image(Storage::get('image')),
