@@ -74,7 +74,7 @@ class ContentResource extends Resource
                     ->reactive(), // important so options update when 'type' or 'active' changes
 
                 Forms\Components\Select::make('active')
-                    ->label('دیده شود')
+                    ->label('نمایش')
                     ->options([
                         '1' => 'بله',
                         '0' => 'خیر',
@@ -118,8 +118,13 @@ class ContentResource extends Resource
                     ->label('دسته بندی'),
 
 
-                Tables\Columns\TextColumn::make('active')
-                    ->label('دیده شود'),
+                Tables\Columns\IconColumn::make('active')
+                    ->label('نمایش')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check')->trueColor('success')
+                    ->falseIcon('heroicon-o-x-mark')->falseColor('danger')
+                ,
+//                    ->formatStateUsing(fn ($state) => $state ? 'بله' : 'خیر'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('تاریخ ایجاد')

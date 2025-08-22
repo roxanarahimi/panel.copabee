@@ -17,7 +17,7 @@ class DateController extends Controller
             "yyyy-MM-d HH:mm:ss"
         );
         $dateTime = \datetime::createfromformat('Y-m-d H:i:s',$date);
-        return $formatter->format($dateTime);
+        return str_replace('-','/',$formatter->format($dateTime));
 
     }
     public function toPersian2($date0)
