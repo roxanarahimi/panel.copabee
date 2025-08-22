@@ -43,7 +43,7 @@ class ContentResource extends Resource
                     ->disk('public') // or your disk
                     ->directory('img/contents')
                     ->imageFormat('png')
-                    ->imageName(fn () => 'content-'.Str::random(8) . '.png'),
+                    ->imageName('content'),
                 Forms\Components\TextInput::make('title')
                     ->label('عنوان')
                     ->required()
