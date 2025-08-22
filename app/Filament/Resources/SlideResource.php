@@ -52,7 +52,8 @@ class SlideResource extends Resource
                     ->options([
                         '1' => 'بله',
                         '0' => 'خیر',
-                    ]),
+                    ])
+                    ->required(),
             ]);
     }
 
